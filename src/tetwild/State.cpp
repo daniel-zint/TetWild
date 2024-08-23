@@ -24,6 +24,7 @@ State::State(const Args &args, const Eigen::MatrixXd &V)
     , eps_input(bbox_diag * args.eps_rel)
     , eps_delta(args.sampling_dist_rel > 0 ? 0 : eps_input / args.stage / std::sqrt(3))
     , initial_edge_len(args.getAbsoluteEdgeLength(bbox_diag))
+    , bbox_dis(args.bbox_dis)
 {
     if (args.sampling_dist_rel > 0) {
         //for testing only

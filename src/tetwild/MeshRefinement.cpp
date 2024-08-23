@@ -1116,7 +1116,7 @@ void MeshRefinement::outputMidResult(bool is_with_bbox, double id) {
     mSaver.save_elem_scalar_field("min_dihedral_angle", angle);
     mSaver.save_elem_scalar_field("energy", energy);
     if(is_with_bbox)
-        mSaver.save_elem_scalar_field("in/out", in_out);
+        mSaver.save_elem_scalar_field("in-out", in_out);
 
     // for debugging
     Eigen::VectorXd scalar(v_ids.size());

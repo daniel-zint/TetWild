@@ -113,6 +113,8 @@ int main(int argc, char *argv[]) {
     app.add_option("--level", log_level, "Log level (0 = most verbose, 6 = off).");
     app.add_option("--save-mid-result", args.save_mid_result, "Get result without winding number: --save-mid-result 2");
 
+    app.add_option("--bbox-dis", args.bbox_dis, "Relative bbox distance to the input (optional, default: 0.05)");
+
     app.add_flag("--no-voxel", args.not_use_voxel_stuffing, "Use voxel stuffing before BSP subdivision.");
     app.add_flag("--is-laplacian", args.smooth_open_boundary, "Do Laplacian smoothing for the surface of output on the holes of input (optional)");
     app.add_flag("-q,--is-quiet", args.is_quiet, "Mute console output. (optional)");

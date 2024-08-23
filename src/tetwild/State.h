@@ -45,6 +45,8 @@ struct State {
     const double eps_delta = 0; // increment for the envelope at each sub-stage of the mesh optimization (see (3) p.8 of the paper)
     int sub_stage = 1; // sub-stage within the stage that tetwild was called with
 
+    double bbox_dis = 0.05; // relative bbox distance to the input
+
     ///////////////
     // [testing] //
     ///////////////

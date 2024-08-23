@@ -286,11 +286,16 @@ void DelaunayTetrahedralization::tetra(const std::vector<Point_3>& m_vertices, G
     Point_3 p_min = bbox.min();
     Point_3 p_max = bbox.max();
 
-    double dis = state.eps * 2;//todo: use epsilon to determine the size of bbx
-    if (dis < state.bbox_diag / 20)
-        dis = state.bbox_diag / 20;
-    else
-        dis = state.eps * 1.1;
+    //double dis = state.eps * 2;//todo: use epsilon to determine the size of bbx
+    //if (dis < state.bbox_diag / 20)
+    //    dis = state.bbox_diag / 20;
+    //else
+    //    dis = state.eps * 1.1;
+
+    double dis = state.bbox_diag * state.bbox_dis;
+    logger().info("#################### hacking bbox distance, relative = {} ####################", state.bbox_dis);
+    logger().info("#################### hacking bbox distance, absolute = {} ####################", dis);
+
     p_min = Point_3(p_min[0] - dis, p_min[1] - dis, p_min[2] - dis);
     p_max = Point_3(p_max[0] + dis, p_max[1] + dis, p_max[2] + dis);
 

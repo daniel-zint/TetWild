@@ -80,6 +80,8 @@ struct Args {
     // Background mesh for the edge length sizing field
     std::string background_mesh = "";
 
+    double bbox_dis = 0.05; // relative bbox distance to the input
+
     // [debug] logging
     bool write_csv_file = true;
     std::string working_dir = "";
