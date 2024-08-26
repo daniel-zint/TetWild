@@ -195,6 +195,7 @@ Options:
   -q,--is-quiet               Mute console output. (optional)
   --log TEXT                  Log info to given file.
   --level INT                 Log level (0 = most verbose, 6 = off).
+  --bbox-dis                  Relative bbox distance to the input (optional, default: 0.05)
 ```
 
 <!--### Tips
