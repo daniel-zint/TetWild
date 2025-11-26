@@ -532,6 +532,9 @@ void LocalOperations::outputInfo(int op_type, double time, bool is_log) {
     }
 }
 
+/**
+ * DZ: Return true if tet is inverted or degenerated.
+ */
 bool LocalOperations::isTetFlip(const std::array<int, 4>& t) {
     CGAL::Orientation ori;
     bool is_rounded = true;
@@ -556,6 +559,9 @@ bool LocalOperations::isTetFlip(int t_id){
     return isTetFlip(tets[t_id]);
 }
 
+/**
+ * DZ: Return true if any tet is inverted or degenerated.
+ */
 bool LocalOperations::isFlip(const std::vector<std::array<int, 4>>& new_tets) {
     ////check orientation
     for (int i = 0; i < new_tets.size(); i++) {
@@ -928,6 +934,12 @@ bool LocalOperations::isEdgeOnBbox(int v1_id, int v2_id, const std::vector<int>&
     return false;
 }
 
+/**
+ * DZ: Check if edge (v1,v2) is on the surface boundary.
+ * 
+ * An edge cannot be on the boundary if v1 or v2 is not marked as on boundary.
+ * An edge is on the boundary if it has exactly one surface face incident.
+ */
 bool LocalOperations::isEdgeOnBoundary(int v1_id, int v2_id) {
 //    if (boundary_points.size() == 0)//if it's a closed mesh, then there cannot be any boundary edges.
 //        return false;
@@ -942,7 +954,7 @@ bool LocalOperations::isEdgeOnBoundary(int v1_id, int v2_id) {
 
     int cnt = 0;
     for (int t_id: tet_vertices[v1_id].conn_tets) {
-        std::array<int, 4> opp_js;
+        std::array<int, 4> opp_js; // DZ: all vertices that are adjacent to v1 except for v2
         int ii = 0;
         for (int j = 0; j < 4; j++) {
             if (tets[t_id][j] == v1_id || tets[t_id][j] == v2_id)
@@ -950,6 +962,7 @@ bool LocalOperations::isEdgeOnBoundary(int v1_id, int v2_id) {
             opp_js[ii++] = j;
         }
         if (ii == 2) {
+            // DZ: opp_js vertices form a tet together with v1,v2
             if (is_surface_fs[t_id][opp_js[0]] != state.NOT_SURFACE)
                 cnt++;
             if (is_surface_fs[t_id][opp_js[1]] != state.NOT_SURFACE)
@@ -1275,6 +1288,9 @@ void LocalOperations::getFaceConnTets(int v1_id, int v2_id, int v3_id, std::vect
     std::set_intersection(v3.begin(), v3.end(), tmp.begin(), tmp.end(), std::back_inserter(t_ids));
 }
 
+/**
+ * DZ: True if a vertex is marked as on surface but has no surface face incident.
+ */
 bool LocalOperations::isIsolated(int v_id) {
     for (auto it = tet_vertices[v_id].conn_tets.begin(); it != tet_vertices[v_id].conn_tets.end(); it++) {
         for (int j = 0; j < 4; j++) {
@@ -1286,9 +1302,13 @@ bool LocalOperations::isIsolated(int v_id) {
     return true;
 }
 
+/** 
+ * DZ: Check if vertex has any boundary edge incident.
+*/
 bool LocalOperations::isBoundaryPoint(int v_id) {
     if(state.is_mesh_closed)
         return false;
+    // DZ: gather adjacent vertices that are marked as on boundary
     std::unordered_set<int> n_v_ids;
     for (int t_id:tet_vertices[v_id].conn_tets) {
         for (int j = 0; j < 4; j++)

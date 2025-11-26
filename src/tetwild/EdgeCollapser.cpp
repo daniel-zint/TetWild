@@ -283,7 +283,7 @@ void EdgeCollapser::postProcess() {
 
 int EdgeCollapser::collapseAnEdge(int v1_id, int v2_id) {
     bool is_edge_too_short = false;
-    bool is_edge_degenerate = false;
+    bool is_edge_degenerate = false; // DZ: edge has length 0
     double length = sqrt(CGAL::squared_distance(tet_vertices[v1_id].posf, tet_vertices[v2_id].posf));
     if(length == 0) {
         is_edge_degenerate = true;
@@ -656,6 +656,9 @@ int EdgeCollapser::collapseAnEdge(int v1_id, int v2_id) {
 //    return true;
 //}
 
+/**
+ * DZ: Check if v1 can be collapsed into v2 if v1 is on the bbox.
+ */
 bool EdgeCollapser::isCollapsable_cd1(int v1_id, int v2_id) {
     //check the bbox tags //if the moved vertex is on the bbox
     bool is_movable = false;
@@ -707,6 +710,9 @@ bool EdgeCollapser::isCollapsable_cd1(int v1_id, int v2_id) {
 //    return false;
 //}
 
+/**
+ * DZ: Check if edge is short enough to be collapsed.
+ */
 bool EdgeCollapser::isCollapsable_cd3(int v1_id, int v2_id, double weight) {
     if (!is_limit_length)
         return true;
@@ -724,6 +730,11 @@ bool EdgeCollapser::isCollapsable_cd3(int v1_id, int v2_id, double weight) {
     return false;
 }
 
+/**
+ * DZ: Envelope check for edge (v1,v2)
+ * - Find all surface triangles incident to v1 that are NOT incident to v2.
+ * - Replace v1 with v2 and perform envelope check for these triangles
+ */
 bool EdgeCollapser::isCollapsable_epsilon(int v1_id, int v2_id) {
 //    std::vector<Triangle_3f> tris;
 //    for (auto it = tet_vertices[v1_id].conn_tets.begin(); it != tet_vertices[v1_id].conn_tets.end(); it++) {
@@ -742,6 +753,7 @@ bool EdgeCollapser::isCollapsable_epsilon(int v1_id, int v2_id) {
 //        }
 //    }
 
+    // get all surface triangles incident to v1
     std::vector<std::array<int, 3>> tri_ids;
     for (auto it = tet_vertices[v1_id].conn_tets.begin(); it != tet_vertices[v1_id].conn_tets.end(); it++) {
         for (int j = 0; j < 4; j++) {
@@ -757,10 +769,11 @@ bool EdgeCollapser::isCollapsable_epsilon(int v1_id, int v2_id) {
 
     std::vector<Triangle_3f> tris;
     for (int i = 0; i < tri_ids.size(); i++) {
+        // ignore triangles incident to v2
         if (std::find(tri_ids[i].begin(), tri_ids[i].end(), v2_id) != tri_ids[i].end())
             continue;
         auto jt = std::find(tri_ids[i].begin(), tri_ids[i].end(), v1_id);
-        *jt = v2_id;
+        *jt = v2_id; // replace v1 with v2
         Triangle_3f tri(tet_vertices[tri_ids[i][0]].posf, tet_vertices[tri_ids[i][1]].posf, tet_vertices[tri_ids[i][2]].posf);
         tris.push_back(tri);
     }
