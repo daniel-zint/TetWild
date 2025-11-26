@@ -50,3 +50,6 @@ if(NOT TARGET CLI11::CLI11)
 	tetwild_download_cli11()
 	add_subdirectory(${TETWILD_EXTERNAL}/cli11)
 endif()
+
+include(CPM)
+include(mshio)

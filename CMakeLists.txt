@@ -158,6 +158,7 @@ target_link_libraries(TetWild
 		CLI11::CLI11
 		igl::cgal
 		warnings::all
+		mshio::mshio
 )
 target_include_directories(TetWild PRIVATE src)
 igl_copy_cgal_dll(TetWild)

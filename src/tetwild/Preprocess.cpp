@@ -72,14 +72,6 @@ void checkBoundary(const Eigen::MatrixXd& V, const Eigen::MatrixXi& F, const Sta
                     std::back_inserter(tmp));
                 if (tmp.size() == 1) {
                     bF(tmp[0]) = 1;
-                    //                    logger().debug("boundary tri! {}", tmp[0]);
-                    //                    Triangle_3f tri(Point_3f(V(F(i, 0), 0), V(F(i, 0), 1),
-                    //                    V(F(i, 0), 2)),
-                    //                                    Point_3f(V(F(i, 1), 0), V(F(i, 1), 1),
-                    //                                    V(F(i, 1), 2)), Point_3f(V(F(i, 2), 0),
-                    //                                    V(F(i, 2), 1), V(F(i, 2), 2)));
-                    //                    if(tri.is_degenerate())
-                    //                        logger().debug("degenerate");
                     bV(F(i, j)) = 1;
                     bV(F(i, (j + 1) % 3)) = 1;
                 }
@@ -110,14 +102,8 @@ bool Preprocess::init(
 
     if (V_in.rows() == 0 || F_in.rows() == 0) return false;
 
-    //        for (int i = 0; i < F_in.rows(); i++) {
-    //            for (int j = 0; j < 3; j++) {
-    //                F_in(i, j) = IV(F_in(i, j));
-    //            }
-    //        }
     logger().debug("#v = {} -> {}", V_tmp.rows(), V_in.rows());
     logger().debug("#f = {} -> {}", F_tmp.rows(), F_in.rows());
-    //    checkBoundary(V_in, F_in, state);
 
     ////get GEO meshes
     geo_sf_mesh.vertices.clear();
@@ -148,11 +134,6 @@ void Preprocess::getBoundaryMesh(GEO::Mesh& b_mesh)
     for (int i = 0; i < F_sf.rows(); i++) {
         for (int j = 0; j < 3; j++) conn_f4v[F_sf(i, j)].push_back(i);
     }
-    // check isolated vertices
-    //    for(int i=0;i<conn_f4v.size();i++){
-    //        if(conn_f4v[i].size()==0)
-    //            logger().debug("iso");
-    //    }
 
     std::vector<std::array<int, 2>> b_edges;
     for (int i = 0; i < F_sf.rows(); i++) {
@@ -301,14 +282,6 @@ void Preprocess::process(
 
     state.eps /= eps_scalar;
     state.eps_2 /= eps_scalar_2;
-    //    state.sampling_dist /= eps_scalar*2;
-
-    // igl::write_triangle_mesh("tmp.obj", V_in, F_in);
-
-    // igl::write_triangle_mesh("tmp.obj", V_in, F_in);
-
-    // output colormap
-    //     outputSurfaceColormap(geo_face_tree, geo_sf_mesh);
 }
 
 void Preprocess::swap(const GEO::Mesh& geo_mesh, const GEO::MeshFacetsAABBWithEps& face_aabb_tree)
@@ -509,8 +482,6 @@ bool Preprocess::removeAnEdge(
 
     // computing normal for checking flipping
     for (int f_id : new_f_ids) {
-        //    for(int f_id:conn_fs[v1_id]) {
-        //        if (f_id != n12_f_ids[0] && f_id != n12_f_ids[1]) {
         std::array<GEO::vec3, 3> vs;
         for (int j = 0; j < 3; j++) {
             vs[j] =
