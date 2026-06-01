@@ -1,7 +1,14 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.25)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 ################################################################################
+
+# Check required CMake version
+set(REQUIRED_CMAKE_VERSION "3.25.0")
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0.0")
+	message(WARNING "CMake version is ${CMAKE_VERSION}, setting stuff for dependencies.")
+	SET(CMAKE_POLICY_VERSION_MINIMUM ${REQUIRED_CMAKE_VERSION})
+endif()
 
 
 ################################################################################
@@ -173,6 +180,6 @@ install(TARGETS TetWild RUNTIME DESTINATION bin)
 # geogram
 set_target_properties(geogram PROPERTIES FOLDER extern/geogram)
 set_target_properties(geogram_third_party PROPERTIES FOLDER extern/geogram)
-set_target_properties(uninstall PROPERTIES FOLDER extern/geogram)
+# set_target_properties(uninstall PROPERTIES FOLDER extern/geogram)
 # pymesh
 set_target_properties(pymesh_tiny PROPERTIES FOLDER extern/pymesh)

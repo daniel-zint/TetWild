@@ -24,8 +24,8 @@ endfunction()
 ## geogram
 function(tetwild_download_geogram)
     tetwild_download_project(geogram
-        GIT_REPOSITORY https://github.com/Yixin-Hu/geogram/
-        GIT_TAG        b613750341a6cdd31ae8df80ecfc26ac7ca1a6ad
+        GIT_REPOSITORY https://github.com/BrunoLevy/geogram
+        GIT_TAG        89adc76b13a940de7abdd0280439963035b85237
     )
 endfunction()
 
